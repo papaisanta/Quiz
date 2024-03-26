@@ -1,0 +1,26 @@
+{% extends "base.html" %}
+{% load static %}
+
+{% block title %}{% endblock title %}
+
+{% block css %}{% endblock css %}
+
+{% block content %}
+    <select name="class" id="class">
+        <option value="">Five</option>
+    </select>
+
+    <select name="subject" id="subject">
+        <option value="">English</option>
+    </select>
+
+    <select name="chapter" id="chapter">
+        <option value="five-english-bapu">Bapu</option>
+    </select>
+
+    <button class="btn btn-primary">Start Quiz</button>
+{% endblock content %}
+
+{% block javascript %}
+    <script src="{% static 'quizes/home.js' %}"></script>
+{% endblock javascript %}

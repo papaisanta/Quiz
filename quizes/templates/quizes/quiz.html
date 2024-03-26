@@ -1,0 +1,21 @@
+{% extends "base.html" %}
+{% load static %}
+
+{% block title %}{% endblock title %}
+
+{% block css %}{% endblock css %}
+
+{% block content %}
+    <h1>{{chapter.subject.classes.name}} - {{chapter.subject.name}} - {{chapter.name}}</h1>
+    <form action="">
+        {% csrf_token %}
+        <div id="quiz-box"></div>
+        <br><br>
+        <button class="btn btn-primary" type="submit">Start Quiz</button>
+    </form>
+    <div id="result-box"></div>
+{% endblock content %}
+
+{% block javascript %}
+    <script src="{% static 'quizes/quiz.js' %}"></script>
+{% endblock javascript %}
