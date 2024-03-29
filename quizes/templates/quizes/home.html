@@ -7,21 +7,21 @@
 
 {% block content %}
     <select name="class" id="class">
-        <option value="">Five</option>
+        <option value="">Select Your Class</option>
     </select>
 
     <select name="subject" id="subject">
-        <option value="">English</option>
     </select>
 
     <select name="chapter" id="chapter">
-        <option value="five-english-bapu">Bapu</option>
     </select>
 
     <button class="btn btn-primary">Start Quiz</button>
 {% endblock content %}
 
 {% block javascript %}
+    <script src="{% static 'quizes/home.js' %}"></script>
+
     <script>
         const class_dropdown = document.getElementById("class");
         const subject_dropdown = document.getElementById("subject");
@@ -45,8 +45,8 @@
                         var selected_class = class_dropdown.options[class_dropdown.selectedIndex];
                         var class_text = selected_class.text;
 
-                        subject_dropdown.innerHTML += `<option value="english">English</option>`
-                        chapter_dropdown.innerHTML += `<option>Passing Runaway of Bapu</option>`
+                        subject_dropdown.innerHTML += `<option>Select Your Subject</option>`
+                        chapter_dropdown.innerHTML += `<option>Select Your Chapter</option>`
                         
                         data.forEach(cls => {
                             if (class_text === cls.name){
@@ -66,7 +66,7 @@
                         var selected_subject = subject_dropdown.options[subject_dropdown.selectedIndex];
                         var subject_text = selected_subject.text;
 
-                        chapter_dropdown.innerHTML += `<option>Passing Runaway of Bapu</option>`
+                        chapter_dropdown.innerHTML += `<option>Select Your chapter</option>`
 
                         data.forEach(cls => {
                             cls.subject.forEach(subject => {
