@@ -31,7 +31,6 @@
             type: "GET",
             url: `${window.location.href}data/`,
             success: function (response) {
-                console.log(response)
                 const data = response.data;
                 data.forEach(cls => {
                     class_dropdown.innerHTML += `
@@ -45,14 +44,14 @@
                         var selected_class = class_dropdown.options[class_dropdown.selectedIndex];
                         var class_text = selected_class.text;
 
-                        subject_dropdown.innerHTML += `<option>Select Your Subject</option>`
-                        chapter_dropdown.innerHTML += `<option>Select Your Chapter</option>`
+                        subject_dropdown.innerHTML = `<option>Select Your Subject</option>`
                         
                         data.forEach(cls => {
                             if (class_text === cls.name){
                                 cls.subject.forEach(subject => {
                                     var option = document.createElement("option");
-                                    option.textContent = subject.name;
+                                    option.text = subject.name;
+                                    option.value = subject.slug
                                     subject_dropdown.add(option)
                                 })
                             }
@@ -63,19 +62,18 @@
                 subject_dropdown.addEventListener(
                     "change",
                     () => {
-                        var selected_subject = subject_dropdown.options[subject_dropdown.selectedIndex];
-                        var subject_text = selected_subject.text;
+                        var subject_text = subject_dropdown.value;
 
-                        chapter_dropdown.innerHTML += `<option>Select Your chapter</option>`
+                        chapter_dropdown.innerHTML = `<option>Select Your chapter</option>`
 
                         data.forEach(cls => {
                             cls.subject.forEach(subject => {
-                                if (subject_text === subject.name) {
+                                if (subject_text === subject.slug) {
                                     subject.chapter.forEach(chapter => {
                                         var option = document.createElement("option");
                                         option.value = chapter.slug;
-                                        option.textContent = chapter.name
-                                        chapter_dropdown.appendChild(option)
+                                        option.text = chapter.name
+                                        chapter_dropdown.add(option)
                                     })
                                 }
                             })
@@ -107,6 +105,5 @@
             }
         )
 
-        console.log("Hello world")
     </script>
 {% endblock javascript %}

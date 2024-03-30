@@ -18,12 +18,20 @@ class Class(models.Model):
 class Subject(models.Model):
     classes = models.ForeignKey(Class, on_delete=models.CASCADE)
     name = models.CharField(max_length=200)
+    slug = models.CharField(max_length=100, default="", blank=True)
 
     def __str__ (self):
         return f"{self.classes.name} - {self.name}"
 
     def get_chapters(self):
         return self.chapter_set.all()
+
+    def save(self, *args, **kwargs):
+        if not self.slug:
+            slugified_class = slugify(self.classes.name)
+            slugified_subject = slugify(self.name)
+            self.slug = f"{slugified_class}-{slugified_subject}"
+        super().save(*args, **kwargs)
 
 
 # Chapter model

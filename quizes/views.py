@@ -20,6 +20,7 @@ def start_quiz(request):
         for subject in cls.get_subjects():
             subject_data = {
                 'name': subject.name,
+                'slug': subject.slug,
                 'chapter': []
             }
             for chapter in subject.get_chapters():
