@@ -1,5 +1,6 @@
 from django.db import models
 from django.utils.text import slugify
+import random
 
 # Create your models here.
 
@@ -57,4 +58,6 @@ class Chapter(models.Model):
 
 
     def get_questions(self):
-        return self.question_set.all()
+        questions = list(self.question_set.all())
+        random.shuffle(questions)
+        return questions [: self.number_of_questions]

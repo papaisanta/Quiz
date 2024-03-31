@@ -3,22 +3,88 @@
 
 {% block title %}{% endblock title %}
 
-{% block css %}{% endblock css %}
+{% block css %}
+    <style>
+        *{
+            background-color: black;
+            color: white;
+        }
+        .quiz{
+            margin: 5%;
+            padding: 2%;
+        }
+    </style>
+{% endblock css %}
 
 {% block content %}
-    <h1>{{chapter.subject.classes.name}} - {{chapter.subject.name}} - {{chapter.name}}</h1>
-    <form action="">
-        {% csrf_token %}
-        <div id="quiz-box"></div>
-        <br><br>
-        <button class="btn btn-primary" type="submit">Start Quiz</button>
-    </form>
-    <div id="result-box"></div>
+    <div class="quiz" data-time="{{chapter.time}}">
+
+
+        <h1>{{chapter.subject.classes.name}} - {{chapter.subject.name}} - {{chapter.name}}</h1>
+
+        <div class="row">
+            <div class="col">পাশ নম্বর : {{chapter.required_score_to_pass}}%</div>
+            <h4 style="text-align: right;" id="timer-box">Countdown</h4>
+        </div>
+
+        <a href="{% url 'home' %}" class="btn btn-danger">ফিরে যান</a>
+
+        <form action="">
+            {% csrf_token %}
+            <div id="quiz-box"></div>
+            <br><br>
+            <button class="btn btn-primary container" type="submit">Save</button>
+        </form>
+        <div id="result-box"></div>
+    </div>
 {% endblock content %}
 
 {% block javascript %}
     <script>
         const quiz_box = document.getElementById("quiz-box");
+        const main_box = document.getElementsByClassName("quiz")[0];
+        const time = main_box.getAttribute("data-time");
+        const timer_box = document.getElementById("timer-box");
+
+        // Timer
+
+        const activateTimer = () => {
+            let minutes = time - 1;
+            let seconds = 60;
+            let displayMinutes;
+            let displaySeconds
+
+            if (time.toString().length < 2){
+                timer_box.innerHTML = `<h5>0${time}:00</h5>`
+            } else {
+                timer_box.innerHTML = `<h5>${time}:00</h5>`
+            }
+
+            const timer = setInterval(() => {
+                seconds -- 
+                if (seconds < 0) {
+                    seconds = 59;
+                    minutes -- ;
+                }
+                if (minutes.toString().length < 2) {
+                    displayMinutes = '0' + minutes;
+                } else {
+                    displayMinutes = minutes;
+                }
+                if (seconds.toString().length < 2) {
+                    displaySeconds = '0' + seconds;
+                } else {
+                    displaySeconds = seconds;
+                }
+                if (minutes == 0 && seconds == 0) {
+                    clearInterval(timer);
+                    sendData();
+                    timer_box.innerHTML = "<h5>0 : 00</h5>"
+                }
+
+                timer_box.innerHTML = `<h5>${displayMinutes} : ${displaySeconds}</h5>`
+            }, 1000)
+        }
 
 
         // Show Questions and Answers
@@ -47,6 +113,7 @@
         const quiz_form = document.querySelector("form");
         const csrf = document.getElementsByName('csrfmiddlewaretoken');
         const result_box = document.getElementById("result-box");
+        const body = document.querySelector("body");
 
         quiz_form.addEventListener(
             "submit",
@@ -80,7 +147,8 @@
                     quiz_form.style.display = "none";
 
 
-                    result_box.innerHTML += `${response.passed ? 'Congratulations!' : 'ups!'} Your result is ${response.score.toFixed(2)}%`
+                    result_box.innerHTML += `${response.passed ? 'দারুণ! ' : 'দুঃখিত!'} তোমার ফলাফল ${response.score.toFixed(2)}%`;
+                    body.style.background = "black";
 
                     results.forEach(result => {
                         const res_div = document.createElement("div");
@@ -91,7 +159,7 @@
                             res_div.classList.add(...cls)
 
                             if (answer == "not answered") {
-                                res_div.innerHTML += "  | not answered"
+                                res_div.innerHTML += "  | উত্তর দেওয়া হইনি"
                                 res_div.classList.add('bg-danger')
                             }else{
                                 const answered = answer['answered']
@@ -99,18 +167,19 @@
 
                                 if (answered == correct_answer) {
                                     res_div.classList.add('bg-success');
-                                    res_div.innerHTML += `  | answered: ${answered}`;
+                                    res_div.innerHTML += `  | সঠিক উত্তর দিয়েছো: ${answered}`;
                                 } else {
                                     res_div.classList.add('bg-danger');
-                                    res_div.innerHTML += `  | correct answer: ${correct_answer}`
-                                    res_div.innerHTML += `  | answerd: ${answered}`
+                                    res_div.innerHTML += `  | তোমার উত্তর : ${answered}`
+                                    res_div.innerHTML += `  | সঠিক উত্তর হল : ${correct_answer}`
                                 }
                             }
                         }
-                        document.body.append(res_div);
+                        main_box.append(res_div);
                     })
                 }
             })
-        }
-            </script>
+        };
+        activateTimer()
+    </script>
 {% endblock javascript %}

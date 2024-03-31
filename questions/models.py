@@ -1,5 +1,6 @@
 from django.db import models
 from quizes.models import Chapter
+import random
 
 # Create your models here.
 

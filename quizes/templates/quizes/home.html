@@ -3,20 +3,63 @@
 
 {% block title %}{% endblock title %}
 
-{% block css %}{% endblock css %}
+{% block css %}
+    <style>
+        *{
+            background-color: navy;
+            color: white;
+            font-family: 'Times New Roman', Times, serif;
+        }
+        main{
+            height: 100vh;
+            width: 100%;
+            justify-content: center;
+            align-items: center;
+            display: flex;
+        }
+        .box{
+            justify-content: center;
+            align-items: center;
+            display: flex;
+            flex-direction: column;
+            width: 40%;
+            box-shadow: 0px 0px 10px rgba(0, 0, 0, 0.3);
+            background-color: white;
+            border-radius: 1%;
+            padding: 2%;
+        }
+        select, button{
+            width: 100%;
+            margin-top: 2%;
+        }
+        select{
+            text-align: center;
+            font-size: 30px;
+            background-color: red;
+        }
+
+        @media (max-width: 667px) and (min-width: 200px){
+            .box{
+                width: 90%;
+            }
+        }
+    </style>
+{% endblock css %}
 
 {% block content %}
-    <select name="class" id="class">
-        <option value="">Select Your Class</option>
-    </select>
+    <div class="box">
+        <select name="class" id="class">
+            <option value="">শ্রেণি</option>
+        </select>
 
-    <select name="subject" id="subject">
-    </select>
+        <select name="subject" id="subject">
+        </select>
 
-    <select name="chapter" id="chapter">
-    </select>
+        <select name="chapter" id="chapter">
+        </select>
 
-    <button class="btn btn-primary">Start Quiz</button>
+        <button class="btn btn-primary">Start Quiz</button>
+    </div>
 {% endblock content %}
 
 {% block javascript %}
@@ -44,7 +87,7 @@
                         var selected_class = class_dropdown.options[class_dropdown.selectedIndex];
                         var class_text = selected_class.text;
 
-                        subject_dropdown.innerHTML = `<option>Select Your Subject</option>`
+                        subject_dropdown.innerHTML = `<option>বিষয়</option>`
                         
                         data.forEach(cls => {
                             if (class_text === cls.name){
@@ -64,7 +107,7 @@
                     () => {
                         var subject_text = subject_dropdown.value;
 
-                        chapter_dropdown.innerHTML = `<option>Select Your chapter</option>`
+                        chapter_dropdown.innerHTML = `<option>অনুচ্ছেদ</option>`
 
                         data.forEach(cls => {
                             cls.subject.forEach(subject => {

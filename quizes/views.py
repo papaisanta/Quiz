@@ -64,7 +64,6 @@ def save_quiz_view(request, slug):
         for k in data.keys():
             question = Question.objects.get(text = k)
             questions.append(question)
-            print(questions)
 
             score = 0
             multiplier = 100 / chapter.number_of_questions
